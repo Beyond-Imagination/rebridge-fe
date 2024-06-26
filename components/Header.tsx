@@ -1,5 +1,4 @@
-import { useMemo } from 'react'
-import { Image, View, Text } from 'react-native'
+import { Image, View } from 'react-native'
 import {ChatbotIcon, UserIcon} from '@/icon'
 import {Link} from 'expo-router'
 
