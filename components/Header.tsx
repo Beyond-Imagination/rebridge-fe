@@ -1,6 +1,7 @@
-import {Image, View, Text, TouchableOpacity} from 'react-native'
-import {ChatbotIcon, ChevronLeftIcon, UserIcon} from '@/icon'
+import { Image, View, Text, TouchableOpacity } from 'react-native'
 import { Link } from 'expo-router'
+
+import { ChatbotIcon, ChevronLeftIcon, UserIcon } from '@/icon'
 
 interface Props {
     type: number, // 1: main, 2: subTitle, 3: back with title
@@ -8,7 +9,7 @@ interface Props {
 }
 
 export function Header({ type, title }: Props) {
-    if (type == 1) {
+    if (type === 1) {
         return (
             <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 100, marginBottom: 5 }}>
                 <Image style={{ width: 120, height: 50, marginLeft: 5 }}
@@ -29,9 +30,9 @@ export function Header({ type, title }: Props) {
         return (
             <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 100, marginBottom: 5 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {type == 3 &&
+                    {type === 3 &&
                         /*TODO: add navigate to back*/
-                        <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => {} }>
+                        <TouchableOpacity style={{ marginLeft: 10 }} onPress={ () => {} }>
                             <ChevronLeftIcon />
                         </TouchableOpacity>
                     }
