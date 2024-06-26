@@ -12,7 +12,8 @@ export default function RootLayout() {
   return (
     <Stack>
         <Stack.Screen name='index' options={{
-            header: () => <Header />,
+            headerBackVisible: false,
+            header: () => <Header type={1} />,
         }} />
     </Stack>
   )
