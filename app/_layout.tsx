@@ -1,4 +1,4 @@
-import { Stack } from "expo-router"
+import { Stack } from 'expo-router'
 import { Header } from '@/components/Header'
 
 /*
@@ -7,14 +7,16 @@ import { Header } from '@/components/Header'
     예를 들어, Header, Footer, Navigation Bar 등이 있습니다.
  */
 
-
 export default function RootLayout() {
-  return (
-    <Stack>
-        <Stack.Screen name='index' options={{
-            headerBackVisible: false,
-            header: () => <Header type={1} />,
-        }} />
-    </Stack>
-  )
+    return (
+        <Stack>
+            <Stack.Screen
+                name="index"
+                options={{
+                    headerBackVisible: false,
+                    header: () => <Header type={1} />,
+                }}
+            />
+        </Stack>
+    )
 }
