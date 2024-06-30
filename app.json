@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/rebridge-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#FF6C3E"
     },
