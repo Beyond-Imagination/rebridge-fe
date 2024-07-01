@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
-import { StyleSheet } from 'react-native'
 
 // 테스트 해보려면, (tabs)의 text를 변경해보세요
 const TabLayout = () => {
