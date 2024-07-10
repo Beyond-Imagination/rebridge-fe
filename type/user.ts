@@ -6,6 +6,11 @@ export interface IUser {
     lastOccupation: string
 }
 
+export interface IUserDetail extends IUser {
+    major: string
+    jobObjectives: string
+}
+
 export interface ISignUpInputs {
     id: string
     passwd1: string
@@ -42,3 +47,16 @@ export interface ISignUpRequest {
 export interface ISignUpResponse {
     oauthId: string
 }
+
+export interface IUpdateUserRequest {
+    body: {
+        lastOccupation: string
+        major: string
+        jobObjectives: string
+    }
+    secret: {
+        token: string
+    }
+}
+
+export interface IUpdateUserResponse extends IUser {}
