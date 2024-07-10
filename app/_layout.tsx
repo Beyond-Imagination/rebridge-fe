@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Text } from 'react-native'
 import { SplashScreen, Stack } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
@@ -39,6 +40,10 @@ export default function RootLayout() {
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync()
+            if ((Text as any).defaultProps == null) {
+                ;(Text as any).defaultProps = {}
+            }
+            ;(Text as any).defaultProps.allowFontScaling = false
         }
     }, [loaded])
 

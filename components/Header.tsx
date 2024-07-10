@@ -12,7 +12,7 @@ interface Props {
 export function Header({ type, title }: Props) {
     if (type === 1) {
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 100, marginBottom: 5 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 100, backgroundColor: '#FFFFFF' }}>
                 <Logo type={2} style={{ width: 120, height: 50 }} />
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     {/*TODO: link to chatbot*/}
@@ -28,7 +28,7 @@ export function Header({ type, title }: Props) {
         )
     } else {
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 100, marginBottom: 5 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 100, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {type === 3 && (
                         /*TODO: add navigate to back*/

@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
+import { Header } from '@/components/Header'
 
 // 테스트 해보려면, (tabs)의 text를 변경해보세요
 const TabLayout = () => {
@@ -12,6 +13,7 @@ const TabLayout = () => {
                     tabBarIcon: ({ focused }) => <FontAwesome name={'home'} size={24} color={focused ? '#FF6C3E' : '#808080'} />,
                     tabBarActiveTintColor: tabBarLabelColor.active,
                     tabBarInactiveTintColor: tabBarLabelColor.inactive,
+                    header: () => <Header type={1} />,
                 }}
             />
 
