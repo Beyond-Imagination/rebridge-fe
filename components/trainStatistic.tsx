@@ -8,14 +8,16 @@ import { useQuery } from '@tanstack/react-query'
 import { getCategorySummary, getRegionDetail, getRegionSummary } from '@/api/trainStatistic'
 import { CarotDown } from '@/icon'
 
-interface RegionDetailProps {
-    region: string
+interface Props {
     year: number
 }
 
-interface PieStatisticProps {
+interface RegionDetailProps extends Props {
+    region: string
+}
+
+interface PieStatisticProps extends Props {
     data: pieDataItem[]
-    year: number
 }
 
 const Loading = styled.ActivityIndicator`

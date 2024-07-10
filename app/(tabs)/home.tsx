@@ -1,16 +1,17 @@
-import { Text } from 'react-native'
 import styled from 'styled-components/native'
+
+import { MainSearch } from '@/components/mainSearch'
 
 const MainView = styled.ScrollView`
     background-color: #ff6c3ecc;
 `
 
-const home = () => {
+const Home = () => {
     return (
         <MainView>
-            <Text>home tab</Text>
+            <MainSearch />
         </MainView>
     )
 }
 
-export default home
+export default Home
