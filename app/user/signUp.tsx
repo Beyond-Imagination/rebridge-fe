@@ -403,7 +403,7 @@ export default function SignUp() {
                         >
                             <Text style={{ fontSize: 20 }}>회원님의 아이디는</Text>
                             <View>
-                                <Text style={{ width: '50%', fontSize: 25, color: '#FF6C3ECC' }}>{watch('id')}</Text>
+                                <Text style={{ width: '100%', fontSize: 25, color: '#FF6C3ECC' }}>{watch('id')}</Text>
                                 <Text style={{ fontSize: 20 }}>입니다.</Text>
                             </View>
                         </View>

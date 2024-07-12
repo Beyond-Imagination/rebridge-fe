@@ -81,6 +81,7 @@ export default function SignIn() {
     const {
         control,
         handleSubmit,
+        setError,
         formState: { isSubmitting, errors },
     } = useForm<Inputs>()
     const errorMessage: string | undefined = errors?.id?.message || errors?.passwd?.message
@@ -89,8 +90,16 @@ export default function SignIn() {
             return postSignIn(body)
         },
         onSuccess: async data => {
-            navigator.dispatch(CommonActions.navigate({ name: 'index' }))
-            auth.setJWT(data.jwt)
+            console.log(data)
+            if (!data.jwt) {
+                setError('id', {
+                    type: 'manual',
+                    message: '로그인에 실패하였습니다.\n아이디와 비밀번호를 확인해주세요.',
+                })
+            } else {
+                navigator.dispatch(CommonActions.navigate({ name: 'index' }))
+                auth.setJWT(data.jwt)
+            }
         },
     })
 
