@@ -8,3 +8,17 @@ export interface trainCourse {
     trainEndDate: string
     trainTime: string
 }
+
+export interface ISimpleTrainCourse {
+    _id: string
+    title: string
+    addr: string
+    elEmplRate: number
+    trainStartDate: string
+    trainEndDate: string
+}
+
+export interface IGetSimpleTrainCourseResponse {
+    docs: ISimpleTrainCourse[]
+    docsNm: number
+}
