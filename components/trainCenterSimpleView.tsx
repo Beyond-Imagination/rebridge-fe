@@ -12,7 +12,14 @@ const screen = Dimensions.get('screen')
 
 const MainView = styled.ScrollView`
     margin: 10px 0;
-    width: ${screen.width}px;
+    padding: 10px 0;
+`
+
+const SubView = styled.View`
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 20px;
+    gap: 10px;
 `
 
 const Loading = styled.ActivityIndicator`
@@ -25,7 +32,7 @@ const ViewBox = styled.View`
     border-radius: 12px;
     width: ${screen.width * 0.9}px;
     align-items: center;
-    margin: 0 8px;
+    padding: 10px 0;
 `
 
 const ListView = styled.View`
@@ -46,7 +53,7 @@ const ItemView = styled.View`
     margin: 5px 0;
     border-color: #c6c6cf;
     border-width: 1px;
-    border-radius: 4px;
+    border-radius: 6px;
 `
 
 const Button = styled.TouchableOpacity`
@@ -153,9 +160,11 @@ export function TrainCenterSimpleView({ filter, title }: Props) {
 export function TrainCenterSimpleList() {
     return (
         <MainView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <TrainCenterSimpleView filter={'마감'} title={'마감 직전 훈련과정'} />
-            <TrainCenterSimpleView filter={'취업률'} title={'높은 취업률'} />
-            <TrainCenterSimpleView filter={'전액지원'} title={'전액 지원'} />
+            <SubView>
+                <TrainCenterSimpleView filter={'마감'} title={'마감 직전 훈련과정'} />
+                <TrainCenterSimpleView filter={'취업률'} title={'높은 취업률'} />
+                <TrainCenterSimpleView filter={'전액지원'} title={'전액 지원'} />
+            </SubView>
         </MainView>
     )
 }

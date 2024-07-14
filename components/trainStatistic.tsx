@@ -92,7 +92,7 @@ const TitleText = styled.Text`
 
 const SubTitle = styled.Text`
     color: #000000;
-    text-align: center;
+    text-align: left;
     font-size: 13px;
     font-weight: bold;
     margin-left: 30px;
