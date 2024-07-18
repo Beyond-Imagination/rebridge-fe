@@ -1,6 +1,9 @@
 import styled from 'styled-components/native'
 
 import { trainCourse } from '@/type'
+import TrainCourseDetailView from './TrainCourseDetailView'
+import { useState } from 'react'
+import { TouchableOpacity } from 'react-native'
 
 interface trainCourseProps {
     course: trainCourse
@@ -14,7 +17,7 @@ const ScrollListView = styled.ScrollView`
     width: 100%;
 `
 
-const TrainCourseBlock = styled.View`
+const TrainCourseBlock = styled(TouchableOpacity)`
     width: 100%;
     padding: 15px;
     background-color: #ffffff;
@@ -61,8 +64,16 @@ const EmplRate = styled.Text`
 
 function TrainCourse({ course }: trainCourseProps) {
     // TODO: add link interactions (navigate detail view and move map position)
+
+    const [showDetail , setShowDetail] = useState(false)
+
     return (
-        <TrainCourseBlock>
+        <>
+        <TrainCourseBlock 
+            onPress={() => {
+            setShowDetail(true);
+        }}
+        >
             <ContentBlock>
                 <TitleText>{course.title}</TitleText>
                 <ContentText>{course.trainCenter}</ContentText>
@@ -74,6 +85,8 @@ function TrainCourse({ course }: trainCourseProps) {
                 <EmplRate>{course.elEmplRate ? `${course.elEmplRate}%` : '데이터 없음'}</EmplRate>
             </EmplRateBlock>
         </TrainCourseBlock>
+        {showDetail  && <TrainCourseDetailView courseId={course._id} onClose={() => setShowDetail(false)} />}
+        </>
     )
 }
 

@@ -46,10 +46,8 @@ const ButtonText = styled.Text`
 export default function RecommendTrainCourseList() {
     const userName = '####'
     const field = '####'
-    const trainCourse = Array.from({ length: 10 }, (_, index) => ({
-        _id: {
-            $oid: `6690f9ac8c73aaa85b61a21a${index}`,
-        },
+    const trainCourse = Array.from({ length: 1 }, (_, index) => ({
+        _id: "6697568f5211f45c4dc63e76",
         title: '[혼합]『HTML5&CSS3』UI/UX웹퍼블리셔 프론트엔드(웹표준,반응형)',
         trainCenter: '서울지방협회',
         elEmplRate: '83.3',

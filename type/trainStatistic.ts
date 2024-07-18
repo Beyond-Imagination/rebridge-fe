@@ -23,3 +23,8 @@ export interface ICategorySummaryResponse {
 }
 
 export interface IRegionDetailResponse extends ICategorySummaryResponse {}
+
+export interface INcsCodeDetailResponse {
+    ncsCdNm: string
+    ncsInfo: string
+}

@@ -1,4 +1,4 @@
-import { ICategorySummaryResponse, IRegionDetailResponse, IRegionSummaryResponse } from '@/type/trainStatistic'
+import { ICategorySummaryResponse, INcsCodeDetailResponse, IRegionDetailResponse, IRegionSummaryResponse } from '@/type/trainStatistic'
 import { SERVER_URL } from '@/config'
 
 export async function getRegionSummary(year: number): Promise<IRegionSummaryResponse> {
@@ -27,6 +27,16 @@ export async function getRegionDetail(region: string, year: number): Promise<IRe
         year: year.toString(),
     })
     const res = await fetch(`${SERVER_URL}/train/statistic/region-detail?${searchParams}`, {
+        method: 'GET',
+    })
+    if (!res.ok) {
+        throw new Error('network response was not ok')
+    }
+    return res.json()
+}
+
+export async function getNcsCodeDetail(target: string): Promise<INcsCodeDetailResponse> {
+    const res = await fetch(`${SERVER_URL}/train/statistic/ncsCd?target=${target}`, {
         method: 'GET',
     })
     if (!res.ok) {
