@@ -1,8 +1,9 @@
 import styled from 'styled-components/native'
-import { GestureResponderEvent, TouchableOpacity } from 'react-native'
-import { Linking } from 'react-native'
+import { useState } from 'react'
+import { GestureResponderEvent, TouchableOpacity, Linking } from 'react-native'
 
 import { trainCenter } from '@/type'
+import TrainCenterDetailView from '@/components/trainCenterDetailView'
 
 interface trainCourseProps {
     course: trainCenter
@@ -16,7 +17,7 @@ const ScrollListView = styled.ScrollView`
     width: 100%;
 `
 
-const TrainCenterBlock = styled.View`
+const TrainCenterBlock = styled.TouchableOpacity`
     width: 100%;
     padding: 10px;
     background-color: #ffffff;
@@ -54,23 +55,27 @@ const GradeText = styled.Text`
 
 function TrainCourse({ course }: trainCourseProps) {
     const gradeText = course.grade.startsWith('우수훈련기관') ? course.grade.replace('우수훈련기관 ', '우수훈련기관\n') : course.grade
+    const [showDetail, setShowDetail] = useState<boolean>(false)
     const onClick = async (event: GestureResponderEvent) => {
         event.preventDefault()
         await Linking.openURL(course.hpAddr)
     }
     // TODO: add link interactions (navigate detail view)
     return (
-        <TrainCenterBlock>
-            <ContentBlock>
-                <TitleText>{course.inoNm}</TitleText>
-                <ContentText>{course.telNo}</ContentText>
-                <ContentText>{course.addr}</ContentText>
-                <TouchableOpacity onPress={onClick}>
-                    <ContentText>{course.hpAddr}</ContentText>
-                </TouchableOpacity>
-            </ContentBlock>
-            <GradeText>{gradeText}</GradeText>
-        </TrainCenterBlock>
+        <>
+            <TrainCenterBlock onPress={() => setShowDetail(true)}>
+                <ContentBlock>
+                    <TitleText>{course.inoNm}</TitleText>
+                    <ContentText>{course.telNo}</ContentText>
+                    <ContentText>{course.addr}</ContentText>
+                    <TouchableOpacity onPress={onClick}>
+                        <ContentText>{course.hpAddr}</ContentText>
+                    </TouchableOpacity>
+                </ContentBlock>
+                <GradeText>{gradeText}</GradeText>
+            </TrainCenterBlock>
+            {showDetail && <TrainCenterDetailView id={course._id} onClose={() => setShowDetail(false)} />}
+        </>
     )
 }
 

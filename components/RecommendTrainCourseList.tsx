@@ -1,8 +1,9 @@
 import styled from 'styled-components/native'
 import { TrainCourseList } from './trainCourseList'
 import { MapIcon } from '@/icon'
+import { trainCourse } from '@/type'
 
-const Container = styled.View`
+const Container = styled.ScrollView`
     background-color: #ffffff;
 `
 
@@ -46,15 +47,15 @@ const ButtonText = styled.Text`
 export default function RecommendTrainCourseList() {
     const userName = '####'
     const field = '####'
-    const trainCourse = Array.from({ length: 1 }, (_, index) => ({
-        _id: "6697568f5211f45c4dc63e76",
+    const trainCourse: trainCourse[] = Array.from({ length: 10 }, _ => ({
+        _id: '6697568f5211f45c4dc63e76',
         title: '[혼합]『HTML5&CSS3』UI/UX웹퍼블리셔 프론트엔드(웹표준,반응형)',
-        trainCenter: '서울지방협회',
-        elEmplRate: '83.3',
+        inoNm: '서울지방협회',
+        elEmplRate: 83.3,
         trainTime: '10일, 총56시간',
         trainStartDate: '2024-06-05',
         trainEndDate: '2024-07-08',
-        address: '서울특별시 동대문구 홍릉로 28 (청량리동 성일빌딩) 4층',
+        addr: '서울특별시 동대문구 홍릉로 28 (청량리동 성일빌딩) 4층',
     }))
 
     return (
@@ -74,7 +75,7 @@ export default function RecommendTrainCourseList() {
                     <ButtonText>지도보기</ButtonText>
                 </StyledButton>
             </ButtonContainer>
-            <TrainCourseList data={trainCourse} />
+            <TrainCourseList data={trainCourse} size={18} />
         </Container>
     )
 }

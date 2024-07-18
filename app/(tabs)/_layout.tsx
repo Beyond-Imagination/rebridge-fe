@@ -29,6 +29,7 @@ const TabLayout = () => {
 
             <Tabs.Screen
                 name="search"
+                initialParams={{ searchText: '', tagList: [] }}
                 options={{
                     title: '훈련기관 찾기',
                     tabBarIcon: ({ focused }) => <FontAwesome name={'search'} size={24} color={focused ? '#FF6C3E' : '#808080'} />,

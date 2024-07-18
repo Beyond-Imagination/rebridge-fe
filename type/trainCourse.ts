@@ -1,9 +1,9 @@
 export interface trainCourse {
     _id: string
     title: string
-    trainCenter: string
+    inoNm: string
     elEmplRate: number
-    address: string
+    addr: string
     trainStartDate: string
     trainEndDate: string
     trainTime: string
@@ -38,5 +38,4 @@ export interface IGetTrainCourseDetailResponse {
     trainPreQual: string
     trainTarget: string
     url: string
-
 }

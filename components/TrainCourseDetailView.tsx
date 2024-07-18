@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, Modal, Text, View, Linking, Alert } from 'react-native';
-import styled from 'styled-components/native';
-import { getTrainCourseDetail } from '@/api/trainCourse';
-import { CrossButton, InfoIcon } from '@/icon';
-import { useQuery } from '@tanstack/react-query';
-import { getNcsCodeDetail } from '@/api';
+import React from 'react'
+import { TouchableOpacity, Text, Linking, Alert } from 'react-native'
+import styled from 'styled-components/native'
+import { getTrainCourseDetail } from '@/api/trainCourse'
+import { CrossButton, InfoIcon } from '@/icon'
+import { useQuery } from '@tanstack/react-query'
+import { getNcsCodeDetail } from '@/api'
 
 interface Props {
-    courseId: string;
-    onClose:() => void;
+    courseId: string
+    onClose: () => void
 }
 
-const ModalContainer = styled.Modal``;
+const ModalContainer = styled.Modal``
 
 const ModalContentContainer = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-`;
+`
 
 const ModalInnerContainer = styled.View`
     width: 80%;
@@ -27,48 +27,48 @@ const ModalInnerContainer = styled.View`
     border-width: 1px;
     border-color: gray;
     padding: 20px;
-`;
+`
 
 const CloseButtonContainer = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: flex-end;
     padding: 20px;
-`;
+`
 
 const ModalTitle = styled.Text`
     font-size: 26px;
     margin-bottom: 10px;
-`;
+`
 
 const MiddleTitle = styled.Text`
     font-size: 18px;
     margin-top: 10px;
     margin-bottom: 10px;
-`;
+`
 
 const ModalTextContainer = styled.View`
     flex-direction: row;
     margin-bottom: 5px;
-`;
+`
 
 const LabelText = styled.Text`
     font-size: 12px;
     font-weight: bold;
-    width: 100px; 
+    width: 100px;
     margin: 5px;
-`;
+`
 
 const ValueText = styled.Text`
     font-size: 12px;
     margin: 5px;
-    flex: 1; 
-`;
+    flex: 1;
+`
 
 const ButtonContainer = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-`;
+`
 
 const StyledButton = styled.TouchableOpacity`
     background-color: #ff6c3ecc;
@@ -78,18 +78,17 @@ const StyledButton = styled.TouchableOpacity`
     margin-top: 40px;
     align-items: center;
     justify-content: center;
-`;
+`
 
 const ButtonText = styled.Text`
     color: #ffffff;
     font-size: 12px;
     text-align-vertical: center;
-`;
+`
 
-export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
-
+export default function TrainCourseDetailView({ courseId, onClose }: Props) {
     function numberWithCommas(number: number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 
     const { data, isLoading } = useQuery({
@@ -97,17 +96,16 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
         queryFn: () => getTrainCourseDetail(courseId),
         enabled: !!courseId,
         refetchOnWindowFocus: false,
-    });
+    })
 
-    const target = data.ncsCd.split('(')[0];
+    const target = data.ncsCd.split('(')[0]
 
-    const { data:ncsDetail } = useQuery({
+    const { data: ncsDetail } = useQuery({
         queryKey: [target],
         queryFn: () => getNcsCodeDetail(target),
         enabled: !!courseId,
         refetchOnWindowFocus: false,
-    });
-    
+    })
 
     if (isLoading) {
         return (
@@ -121,7 +119,7 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
                     </ModalInnerContainer>
                 </ModalContentContainer>
             </ModalContainer>
-        );
+        )
     }
 
     if (!data) {
@@ -136,7 +134,7 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
                     </ModalInnerContainer>
                 </ModalContentContainer>
             </ModalContainer>
-        );
+        )
     }
     //url
 
@@ -160,25 +158,15 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
                     </ModalTextContainer>
 
                     <ModalTextContainer>
-                        <LabelText>NCS 직무 분류</LabelText> 
+                        <LabelText>NCS 직무 분류</LabelText>
                         <TouchableOpacity
-                             onPress={() => 
-                                Alert.alert(
-                                    ncsDetail?.ncsCdNm,
-                                    ncsDetail?.ncsInfo,
-                                    [
-                                      { text: '닫기' },
-                                    ],
-                                    { cancelable: false }
-                                  )
-                             }
+                            onPress={() => Alert.alert(ncsDetail?.ncsCdNm, ncsDetail?.ncsInfo, [{ text: '닫기' }], { cancelable: false })}
                         >
-                        <ValueText>
-                            {data.ncsCd.split('(')[0]}
-                            <InfoIcon width={10} height={10} />
-                        </ValueText>
+                            <ValueText>
+                                {data.ncsCd.split('(')[0]}
+                                <InfoIcon width={10} height={10} />
+                            </ValueText>
                         </TouchableOpacity>
-
                     </ModalTextContainer>
 
                     <ModalTextContainer>
@@ -193,14 +181,14 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
 
                     <ModalTextContainer>
                         <LabelText>실제부담비용</LabelText>
-                        <ValueText>{data.realMan === data.courseMan ? "전액지원" : numberWithCommas(data.realMan)+" 원"}</ValueText>
+                        <ValueText>{data.realMan === data.courseMan ? '전액지원' : numberWithCommas(data.realMan) + ' 원'}</ValueText>
                     </ModalTextContainer>
 
                     <MiddleTitle>훈련과정 안내</MiddleTitle>
 
                     <ModalTextContainer>
                         <LabelText>선수학습</LabelText>
-                        <ValueText>{data.trainPreCourse == null ? "해당없음" : data.trainPreCourse}</ValueText>
+                        <ValueText>{data.trainPreCourse == null ? '해당없음' : data.trainPreCourse}</ValueText>
                     </ModalTextContainer>
 
                     <ModalTextContainer>
@@ -210,18 +198,18 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
 
                     <ModalTextContainer>
                         <LabelText>기취득자격</LabelText>
-                        <ValueText>{data.trainPreQual == null ? "해당없음" : data.trainPreQual}</ValueText>
+                        <ValueText>{data.trainPreQual == null ? '해당없음' : data.trainPreQual}</ValueText>
                     </ModalTextContainer>
 
                     <ModalTextContainer>
                         <LabelText>훈련대상자</LabelText>
-                        <ValueText>{data.trainTarget == null ? "상관없음" : data.trainTarget}</ValueText>
+                        <ValueText>{data.trainTarget == null ? '상관없음' : data.trainTarget}</ValueText>
                     </ModalTextContainer>
 
                     <ButtonContainer>
                         <StyledButton
                             onPress={() => {
-                                Linking.openURL(data.url);
+                                Linking.openURL(data.url)
                             }}
                         >
                             <ButtonText>신청하기</ButtonText>
@@ -230,5 +218,5 @@ export default function TrainCourseDetailView ({ courseId, onClose }: Props) {
                 </ModalInnerContainer>
             </ModalContentContainer>
         </ModalContainer>
-    );
-};
+    )
+}
