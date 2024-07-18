@@ -63,6 +63,8 @@ const TrainCourseBox = styled.View`
     align-items: center;
 `
 
+const DetailBlock = styled.ScrollView``
+
 const CloseButton = styled.TouchableOpacity`
     width: 100%;
     align-items: flex-end;
@@ -118,9 +120,12 @@ export default function TrainCenterDetailView({ id, onClose }: Props) {
     if (!data) {
         return (
             <Modal>
-                <MainView>
+                <MainView source={require('../assets/images/detail-view-image.png')}>
                     <ShadowStyle distance={7}>
                         <DetailContainer>
+                            <CloseButton onPress={onClose}>
+                                <CrossButton width={30} height={30} />
+                            </CloseButton>
                             <Loading />
                         </DetailContainer>
                     </ShadowStyle>
@@ -137,18 +142,20 @@ export default function TrainCenterDetailView({ id, onClose }: Props) {
                         <CloseButton onPress={onClose}>
                             <CrossButton width={30} height={30} />
                         </CloseButton>
-                        <Title>
-                            {data.trainCenter.inoNm}({data.trainCenter.grade})
-                        </Title>
-                        <InfoBox title={'주소'} content={`${data.trainCenter.addr}(${data.trainCenter.zipCd})`} />
-                        <InfoBox title={'전화번호'} content={data.trainCenter.telNo} />
-                        <InfoBox title={'팩스번호'} content={data.trainCenter.faxNo} />
-                        <InfoBox title={'이메일'} content={data.trainCenter.email} />
-                        <InfoBox title={'홈페이지'} content={data.trainCenter.hpAddr} />
-                        <SubTitle>모집중인 훈련과정</SubTitle>
-                        <TrainCourseBox>
-                            <TrainCourseList data={data.trainCourses} size={16} />
-                        </TrainCourseBox>
+                        <DetailBlock>
+                            <Title>
+                                {data.trainCenter.inoNm}({data.trainCenter.grade})
+                            </Title>
+                            <InfoBox title={'주소'} content={`${data.trainCenter.addr}(${data.trainCenter.zipCd})`} />
+                            <InfoBox title={'전화번호'} content={data.trainCenter.telNo} />
+                            <InfoBox title={'팩스번호'} content={data.trainCenter.faxNo} />
+                            <InfoBox title={'이메일'} content={data.trainCenter.email} />
+                            <InfoBox title={'홈페이지'} content={data.trainCenter.hpAddr} />
+                            <SubTitle>모집중인 훈련과정</SubTitle>
+                            <TrainCourseBox>
+                                <TrainCourseList data={data.trainCourses} size={16} />
+                            </TrainCourseBox>
+                        </DetailBlock>
                     </DetailContainer>
                 </ShadowStyle>
             </MainView>

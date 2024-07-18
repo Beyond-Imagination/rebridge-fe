@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
+import { useAuthorization } from '@/provider'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 
 const Container = styled.View`
     background-color: #ffffff;
@@ -29,15 +31,19 @@ const ButtonText = styled.Text`
 `
 
 export default function RecommendInfoRequired() {
+    const auth = useAuthorization()
+    const navigator = useNavigation()
+    const onPress = () => {
+        if (!auth.jwt) {
+            navigator.dispatch(CommonActions.navigate({ name: 'user/signIn' }))
+        } else {
+            navigator.dispatch(CommonActions.navigate({ name: 'myInfo' }))
+        }
+    }
     return (
         <Container>
             <MessageText>훈련과정 추천 서비스를 이용하기 위해서는{'\n'}추가적인 정보가 필요합니다.</MessageText>
-            <StyledButton
-                onPress={() => {
-                    // TODO: 정보입력 페이지로 이동
-                    alert('정보입력 페이지로 이동')
-                }}
-            >
+            <StyledButton onPress={onPress}>
                 <ButtonText>정보 입력 하러가기</ButtonText>
             </StyledButton>
         </Container>

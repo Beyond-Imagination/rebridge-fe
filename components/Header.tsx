@@ -1,44 +1,101 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { Link } from 'expo-router'
+import { TouchableOpacity } from 'react-native'
+import styled from 'styled-components/native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 
 import { ChatbotIcon, ChevronLeftIcon, UserIcon } from '@/icon'
 import Logo from '@/components/Logo'
+import { useAuthorization } from '@/provider'
 
 interface Props {
     type: number // 1: main, 2: subTitle, 3: back with title
     title?: string
 }
 
+interface titleProps {
+    color: string
+}
+
+const MainViewType1 = styled.View`
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100px;
+    background-color: #ffffff;
+`
+
+const MainViewType2 = styled.View`
+    flex-direction: row;
+    align-items: flex-end;
+    height: 100px;
+    background-color: #ffffff;
+`
+
+const ContentBlock = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const TitleBlock = styled.View`
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+`
+
+const LinkBlock = styled.TouchableOpacity`
+    margin: 0 10px 5px 10px;
+`
+
+const Title = styled.Text<titleProps>`
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 15px;
+    color: ${props => props.color};
+`
+
 export function Header({ type, title }: Props) {
+    const navigator = useNavigation()
+    const auth = useAuthorization()
     if (type === 1) {
+        const userPress = () => {
+            if (!auth.jwt) {
+                navigator.dispatch(CommonActions.navigate({ name: 'user/signIn' }))
+            } else {
+                navigator.dispatch(CommonActions.navigate({ name: 'myInfo' }))
+            }
+        }
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 100, backgroundColor: '#FFFFFF' }}>
+            <MainViewType1>
                 <Logo type={2} style={{ width: 120, height: 50 }} />
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <ContentBlock>
                     {/*TODO: link to chatbot*/}
-                    <Link href={''} style={{ marginHorizontal: 10 }}>
+                    <LinkBlock>
                         <ChatbotIcon width={40} height={40} />
-                    </Link>
+                    </LinkBlock>
                     {/*TODO: link to user page*/}
-                    <Link href={''} style={{ marginHorizontal: 10 }}>
+                    <LinkBlock onPress={userPress}>
                         <UserIcon width={40} height={40} />
-                    </Link>
-                </View>
-            </View>
+                    </LinkBlock>
+                </ContentBlock>
+            </MainViewType1>
         )
     } else {
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 100, backgroundColor: '#FFFFFF' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <MainViewType2>
+                <TitleBlock>
                     {type === 3 && (
-                        /*TODO: add navigate to back*/
-                        <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => {}}>
-                            <ChevronLeftIcon width={30} height={30} />
+                        <TouchableOpacity
+                            style={{ marginLeft: 10 }}
+                            onPress={() => {
+                                navigator.goBack()
+                            }}
+                        >
+                            <ChevronLeftIcon width={28} height={28} />
                         </TouchableOpacity>
                     )}
-                    <Text style={{ fontWeight: 'bold', fontSize: 30, textAlignVertical: 'center', marginLeft: 15 }}>{title}</Text>
-                </View>
-            </View>
+                    <Title color={type === 3 ? '#90909F' : '#000000'}>{title}</Title>
+                </TitleBlock>
+            </MainViewType2>
         )
     }
 }

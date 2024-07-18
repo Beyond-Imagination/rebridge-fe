@@ -4,7 +4,6 @@ import { SplashScreen, Stack } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 
-import { Header } from '@/components/Header'
 import { AuthProvider } from '@/provider'
 
 /*
@@ -56,7 +55,6 @@ export default function RootLayout() {
             <AuthProvider>
                 <Stack>
                     <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                    <Stack.Screen name="index" options={{ headerBackVisible: false, header: () => <Header type={1} /> }} />
                     <Stack.Screen name="+not-found" />
                     <Stack.Screen name="user/signUp" options={{ headerShown: false }} />
                     <Stack.Screen name="user/signIn" options={{ headerShown: false }} />

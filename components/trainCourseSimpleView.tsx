@@ -2,10 +2,17 @@ import styled from 'styled-components/native'
 import { Dimensions } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { getTrainCourseSimpleView } from '@/api/trainCourse'
+import { ISimpleTrainCourse } from '@/type'
+import { useState } from 'react'
+import TrainCourseDetailView from '@/components/TrainCourseDetailView'
 
 interface Props {
     filter: string
     title: string
+}
+
+interface trainCourseProps {
+    course: ISimpleTrainCourse
 }
 
 const screen = Dimensions.get('screen')
@@ -98,9 +105,33 @@ const NoneText = styled.Text`
     margin: 10px;
 `
 
-export function TrainCenterSimpleView({ filter, title }: Props) {
+function TrainCourseSimple({ course }: trainCourseProps) {
+    const [showDetail, setShowDetail] = useState(false)
+
+    return (
+        <>
+            <ItemView key={course._id}>
+                <ItemText numberOfLines={2} ellipsizeMode="tail">
+                    {course.title}
+                </ItemText>
+                <ItemText numberOfLines={2} ellipsizeMode="tail">
+                    {course.addr}
+                </ItemText>
+                <ItemText numberOfLines={1} ellipsizeMode="tail">
+                    {course.trainStartDate}
+                </ItemText>
+                <Button onPress={() => setShowDetail(true)}>
+                    <ButtonText>상세보기</ButtonText>
+                </Button>
+            </ItemView>
+            {showDetail && <TrainCourseDetailView courseId={course._id} onClose={() => setShowDetail(false)} />}
+        </>
+    )
+}
+
+export function TrainCourseSimpleView({ filter, title }: Props) {
     const { data } = useQuery({
-        queryKey: ['trainCenterSimpleList', filter],
+        queryKey: ['trainCourseSimpleList', filter],
         queryFn: () => getTrainCourseSimpleView(filter),
         enabled: !!filter,
         refetchOnWindowFocus: false,
@@ -130,29 +161,7 @@ export function TrainCenterSimpleView({ filter, title }: Props) {
                 <ListText>시작일</ListText>
                 <ListText>상세보기</ListText>
             </ListView>
-            {data.docsNm === 0 ? (
-                <NoneText>데이터 없음</NoneText>
-            ) : (
-                data.docs.map(course => {
-                    return (
-                        <ItemView key={course._id}>
-                            <ItemText numberOfLines={2} ellipsizeMode="tail">
-                                {course.title}
-                            </ItemText>
-                            <ItemText numberOfLines={2} ellipsizeMode="tail">
-                                {course.addr}
-                            </ItemText>
-                            <ItemText numberOfLines={1} ellipsizeMode="tail">
-                                {course.trainStartDate}
-                            </ItemText>
-                            {/*TODO: go to train course detail view*/}
-                            <Button>
-                                <ButtonText>상세보기</ButtonText>
-                            </Button>
-                        </ItemView>
-                    )
-                })
-            )}
+            {data.docsNm === 0 ? <NoneText>데이터 없음</NoneText> : data.docs.map(course => <TrainCourseSimple course={course} />)}
         </ViewBox>
     )
 }
@@ -161,9 +170,9 @@ export function TrainCenterSimpleList() {
     return (
         <MainView horizontal={true} showsHorizontalScrollIndicator={false}>
             <SubView>
-                <TrainCenterSimpleView filter={'마감'} title={'마감 직전 훈련과정'} />
-                <TrainCenterSimpleView filter={'취업률'} title={'높은 취업률'} />
-                <TrainCenterSimpleView filter={'전액지원'} title={'전액 지원'} />
+                <TrainCourseSimpleView filter={'마감'} title={'마감 직전 훈련과정'} />
+                <TrainCourseSimpleView filter={'취업률'} title={'높은 취업률'} />
+                <TrainCourseSimpleView filter={'전액지원'} title={'전액 지원'} />
             </SubView>
         </MainView>
     )

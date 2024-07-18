@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 
-const myInfo = () => {
+const MyInfo = () => {
     return (
         <View>
             <Text>My Information Tab</Text>
@@ -8,4 +8,4 @@ const myInfo = () => {
     )
 }
 
-export default myInfo
+export default MyInfo

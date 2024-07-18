@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 
 import { MainSearch } from '@/components/mainSearch'
-import { TrainCenterSimpleList } from '@/components/trainCenterSimpleView'
+import { TrainCenterSimpleList } from '@/components/trainCourseSimpleView'
 import { TrainStatistic } from '@/components/trainStatistic'
 
 const MainView = styled.ScrollView`
@@ -12,7 +12,7 @@ const SubView = styled.View`
     background-color: #ff6c3ecc;
 `
 
-const Home = () => {
+const Index = () => {
     return (
         <MainView>
             <MainSearch />
@@ -24,4 +24,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Index
