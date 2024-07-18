@@ -16,7 +16,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native'
 import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import PickerSelect, { Item } from 'react-native-picker-select'
+import PickerSelect from 'react-native-picker-select'
 
 import { ISignUpInputs, ISignUpRequest } from '@/type'
 import InputForm from '@/components/inputForm'
@@ -74,16 +74,6 @@ export default function SignUp() {
         handleSubmit,
         formState: { isSubmitting, errors },
     } = useForm<ISignUpInputs>()
-
-    // TODO: change occupationList
-    const occupationList: Item[] = [
-        { label: '회사원', value: '회사원' },
-        { label: '개발자', value: '개발자' },
-        { label: '디자이너', value: '디자이너' },
-        { label: '마케터', value: '마케터' },
-        { label: '회계, 사무', value: '회계, 사무' },
-        { label: '학생', value: '학생' },
-    ]
 
     const mutation = useMutation({
         mutationFn: (body: ISignUpRequest) => {
@@ -339,17 +329,13 @@ export default function SignUp() {
                                     control={control}
                                     name="occupation"
                                     rules={{ required: '직업 입력이 필요합니다' }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <PickerSelect
-                                            placeholder={{ label: '입력', value: null }}
-                                            style={{
-                                                inputIOS: styles.input,
-                                                inputAndroid: styles.input,
-                                            }}
-                                            fixAndroidTouchableBug={true}
-                                            useNativeAndroidPickerStyle={false}
-                                            onValueChange={value => onChange(value)}
-                                            items={occupationList}
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="입력"
+                                            placeholderTextColor="#B0B0B0"
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
                                             value={value}
                                         />
                                     )}
