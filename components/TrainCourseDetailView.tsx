@@ -7,6 +7,7 @@ import { Shadow } from 'react-native-shadow-2'
 import { getTrainCourseDetail } from '@/api/trainCourse'
 import { CrossButton, InfoIcon } from '@/icon'
 import ModalNCS from '@/components/ModalNCS'
+import { getNcsCodeDetail } from '@/api'
 
 interface Props {
     courseId: string
@@ -31,9 +32,19 @@ const ShadowStyle = styled(Shadow)`
     border-color: #ffffff;
 `
 
+// const ModalInnerContainer = styled.ScrollView`
+//     flex: 0.8;
+//     width: 90%;
+//     background-color: white;
+//     border-radius: 10px;
+//     border-width: 1px;
+//     border-color: gray;
+//     padding: 20px;
+// `
 const ModalContainer = styled.Modal``
 
 const ModalContentContainer = styled.ImageBackground`
+    flex: 0.8;
     height: ${screen.height}px;
     align-items: center;
     justify-items: center;
@@ -57,6 +68,7 @@ const StyledButton = styled.TouchableOpacity`
     margin-top: 40px;
     align-items: center;
     justify-content: center;
+    margin-bottom: 100px;
 `
 
 const ModalInnerContainer = styled.View`
@@ -110,6 +122,13 @@ const ButtonText = styled.Text`
     text-align-vertical: center;
 `
 
+
+const LoadingText = styled.Text`
+  text-align: center;
+  margin-top: 200px;
+  font-size: 18px;
+`
+
 const InfoTitle = styled.Text`
     font-weight: bold;
     font-size: 16px;
@@ -140,12 +159,36 @@ export default function TrainCourseDetailView({ courseId, onClose }: Props) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 
-    const { data } = useQuery({
+    const { data,isLoading } = useQuery({
         queryKey: ['trainCourseDetail', courseId],
         queryFn: () => getTrainCourseDetail(courseId),
         enabled: !!courseId,
         refetchOnWindowFocus: false,
     })
+
+    const target = data?.ncsCd.split('(')[0]
+
+    const { data: ncsDetail } = useQuery({
+        queryKey: [target ?? ''],
+        queryFn: () => getNcsCodeDetail(target ?? ''),
+        enabled: !!courseId,
+        refetchOnWindowFocus: false,
+    })
+
+    if (isLoading) {
+        return (
+            <ModalContainer visible={true} animationType="slide">
+                <ModalContentContainer>
+                    <ModalInnerContainer>
+                        <CloseButtonContainer onPress={onClose}>
+                            <CrossButton width={30} height={30} />
+                        </CloseButtonContainer>
+                        <LoadingText>훈련기관 상세정보 로딩중입니다...🌀</LoadingText>
+                    </ModalInnerContainer>
+                </ModalContentContainer>
+            </ModalContainer>
+        )
+    }
 
     if (!data) {
         return (
@@ -186,7 +229,10 @@ export default function TrainCourseDetailView({ courseId, onClose }: Props) {
                                 </InfoContentBlock>
                             </InfoContainer>
                             <InfoBox title={'훈련비용'} content={`${numberWithCommas(data.courseMan)} 원`} />
-                            <InfoBox title={'실제부담비용'} content={`${numberWithCommas(data.realMan)} 원`} />
+
+                            {/* <InfoBox title={'실제부담비용'} content={`${numberWithCommas(data.realMan)} 원`} /> */}
+                            <InfoBox title={'실제부담비용'} content={data.realMan === data.courseMan ? '전액지원' : numberWithCommas(data.realMan) + ' 원'} />
+
                             <MiddleTitle>훈련과정 안내</MiddleTitle>
                             <InfoBox title={'선수학습'} content={data.trainPreCourse ? data.trainPreCourse : '해당없음'} />
                             <InfoBox title={'훈련목표'} content={data.trainGoal ? data.trainGoal : '해당없음'} />

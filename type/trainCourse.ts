@@ -39,3 +39,16 @@ export interface IGetTrainCourseDetailResponse {
     trainTarget: string
     url: string
 }
+export interface IGetRecommendTrainCourseListResponse {
+    docs: Array<{
+        _id: string;
+        title: string;
+        elEmplRate: number;
+        trainTime: string;
+        trainStartDate: string;
+        trainEndDate: string;
+        addr: string;
+        inoNm: string;
+        recommendScore: number;
+    }>;
+}

@@ -2,6 +2,9 @@ import styled from 'styled-components/native'
 import { TrainCourseList } from './trainCourseList'
 import { MapIcon } from '@/icon'
 import { trainCourse } from '@/type'
+import { useAuthorization } from '@/provider'
+import { useQuery } from '@tanstack/react-query'
+import { getRecommendTrainCourseList, getUserDetail } from '@/api'
 
 const Container = styled.ScrollView`
     background-color: #ffffff;
@@ -12,6 +15,12 @@ const TitleText = styled.Text`
     font-weight: bold;
     margin: 10px;
 `
+const LoadingText = styled.Text`
+    font-size: 18px;
+    margin: 10px;
+    text-align: center;
+    margin-top: 150px;
+`;
 
 const SubtitleText = styled.Text`
     font-size: 16px;
@@ -45,25 +54,33 @@ const ButtonText = styled.Text`
 `
 
 export default function RecommendTrainCourseList() {
-    const userName = '####'
-    const field = '####'
-    const trainCourse: trainCourse[] = Array.from({ length: 10 }, _ => ({
-        _id: '6697568f5211f45c4dc63e76',
-        title: '[혼합]『HTML5&CSS3』UI/UX웹퍼블리셔 프론트엔드(웹표준,반응형)',
-        inoNm: '서울지방협회',
-        elEmplRate: 83.3,
-        trainTime: '10일, 총56시간',
-        trainStartDate: '2024-06-05',
-        trainEndDate: '2024-07-08',
-        addr: '서울특별시 동대문구 홍릉로 28 (청량리동 성일빌딩) 4층',
-    }))
 
-    return (
+    const { jwt } = useAuthorization()
+
+    const { data:userdata } = useQuery({
+        queryKey: ['getUserDetail', jwt],
+        queryFn: () => getUserDetail({ jwt }),
+        enabled: !!jwt,
+    })
+
+    const userName = userdata?.user?.name ?? '';
+
+    const { data, isLoading } = useQuery({
+        queryKey: ['getRecommendTrainCourseList', jwt],
+        queryFn: () => getRecommendTrainCourseList(jwt),
+        enabled: !!jwt,
+    })
+
+    const recommendCourseList = data?.docs
+
+    if(isLoading){
+        return(
+
         <Container>
             <TitleText>
                 <HighlightText>{userName}</HighlightText>님의 맞춤 훈련 과정
             </TitleText>
-            <SubtitleText>{field}분야의 직업 훈련 기관을 추천해드립니다.</SubtitleText>
+            <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
             <ButtonContainer>
                 <StyledButton
                     onPress={() => {
@@ -75,7 +92,29 @@ export default function RecommendTrainCourseList() {
                     <ButtonText>지도보기</ButtonText>
                 </StyledButton>
             </ButtonContainer>
-            <TrainCourseList data={trainCourse} size={18} />
+            <LoadingText>{userName}님을 위한 맞춤 직업 훈련 기관을 {"\n"} 검색 중입니다...🌀</LoadingText>
+        </Container>
+        )
+    }
+
+    return (
+        <Container>
+            <TitleText>
+                <HighlightText>{userName}</HighlightText>님의 맞춤 훈련 과정
+            </TitleText>
+            <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
+            <ButtonContainer>
+                <StyledButton
+                    onPress={() => {
+                        // TODO: 정보입력 페이지로 이동
+                        alert('훈련과정 추천(지도뷰) 페이지로 이동')
+                    }}
+                >
+                    <MapIcon width={24} height={24} />
+                    <ButtonText>지도보기</ButtonText>
+                </StyledButton>
+            </ButtonContainer>
+            <TrainCourseList data={recommendCourseList} size={18} />
         </Container>
     )
 }
