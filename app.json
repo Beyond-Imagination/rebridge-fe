@@ -13,13 +13,20 @@
       "backgroundColor": "#FF6C3E"
     },
     "ios": {
+      "config": {
+        "googleMapsApiKey": ""
+      },
       "supportsTablet": true
     },
     "android": {
+      "config": {
+        "googleMaps": "AIzaSyBg2u6bso4yFBqMOfBgbULlvfA9WIWHRhk"
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FF6C3E"
-      }
+      },
+      "package": "com.beyondimagination.rebridge"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +38,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9f3b8712-06a2-4c32-a1e3-afc30fabd52d"
+      }
+    },
+    "owner": "joonamin44"
   }
 }

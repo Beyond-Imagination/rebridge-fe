@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native'
+import {View, Text} from "react-native";
 
 const MyInfo = () => {
     return (
         <View>
-            <Text>My Information Tab</Text>
+            <Text>My Information</Text>
         </View>
     )
 }
