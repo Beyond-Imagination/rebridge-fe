@@ -23,8 +23,8 @@ export async function getRecommendTrainCourseList(jwt: string): Promise<IGetReco
     const res = await fetch(`${SERVER_URL}/train/course/recommend`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${jwt}`,
-        }
+            Authorization: `Bearer ${jwt}`,
+        },
     })
     if (!res.ok) {
         throw new Error('network response was not ok')

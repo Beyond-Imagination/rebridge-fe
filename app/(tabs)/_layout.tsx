@@ -43,6 +43,12 @@ const TabLayout = () => {
             />
             <Tabs.Screen
                 name="search"
+                listeners={{
+                    tabPress: e => {
+                        e.preventDefault()
+                        navigator.dispatch(CommonActions.navigate('search'))
+                    },
+                }}
                 initialParams={{ searchText: '', tagList: [] }}
                 options={{
                     title: '훈련기관 찾기',

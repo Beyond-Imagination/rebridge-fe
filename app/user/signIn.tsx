@@ -90,7 +90,6 @@ export default function SignIn() {
             return postSignIn(body)
         },
         onSuccess: async data => {
-            console.log(data)
             if (!data.jwt) {
                 setError('id', {
                     type: 'manual',

@@ -1,16 +1,22 @@
+import { useQuery } from '@tanstack/react-query'
+
 import RecommendInfoRequired from '@/components/RecommendInfoRequired'
 import RecommendTrainCourseList from '@/components/RecommendTrainCourseList'
 import { useAuthorization } from '@/provider'
+import { getUserDetail } from '@/api'
 
 const Recommend = () => {
-    //TODO: user의 추가 정보가 없는경우 hasInfo를 false로 변경
-    let hasInfo = false
     const { jwt } = useAuthorization()
-    if (jwt) {
-        hasInfo = true
+    const { data: userDetail } = useQuery({
+        queryKey: ['getUserDetail', jwt],
+        queryFn: () => getUserDetail({ jwt }),
+        enabled: !!jwt,
+    })
+    if (userDetail?.user && userDetail.user.occupation && userDetail.user.jobObjectives && userDetail.user.major) {
+        return <RecommendTrainCourseList user={userDetail.user} />
+    } else {
+        return <RecommendInfoRequired />
     }
-
-    return <>{hasInfo ? <RecommendTrainCourseList /> : <RecommendInfoRequired />}</>
 }
 
 export default Recommend

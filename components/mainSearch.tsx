@@ -7,6 +7,7 @@ import { TagButtonList } from '@/components/tagButton'
 import { SearchIcon } from '@/icon'
 import { Controller, useForm } from 'react-hook-form'
 import React, { useState } from 'react'
+import { SearchTarget } from '@/type'
 
 interface BoxProps {
     pos: number
@@ -84,18 +85,20 @@ const ButtonText = styled.Text`
 export function MainSearch() {
     const navigator = useNavigation()
     const [clickedTags, setClickedTags] = useState<string[]>([])
-    const { control, handleSubmit } = useForm<Inputs>()
+    const { control, reset, handleSubmit } = useForm<Inputs>()
 
     const handleTagClick = (text: string) => {
         setClickedTags(prevState => (prevState.includes(text) ? prevState.filter(tag => tag !== text) : [...prevState, text]))
     }
     const onPress = (data: Inputs) => {
-        navigator.dispatch(
-            CommonActions.navigate('search', {
-                searchText: data.text,
-                tagList: clickedTags,
-            }),
-        )
+        const today = new Date()
+        const target: SearchTarget = {
+            searchText: data.text,
+            tagList: clickedTags,
+            createdAt: `${today.getFullYear()}. ${today.getMonth()}. ${today.getDate()}`,
+        }
+        navigator.dispatch(CommonActions.navigate('search', target))
+        reset()
     }
 
     return (

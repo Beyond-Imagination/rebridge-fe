@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
-import { useState } from 'react'
-import { GestureResponderEvent, TouchableOpacity, Linking } from 'react-native'
+import React, { useState } from 'react'
+import { GestureResponderEvent, TouchableOpacity, Linking, ScrollView, Dimensions } from 'react-native'
 
 import { trainCenter } from '@/type'
 import TrainCenterDetailView from '@/components/trainCenterDetailView'
@@ -11,7 +11,10 @@ interface trainCourseProps {
 
 interface listProps {
     data: trainCenter[]
+    scrollRef: React.RefObject<ScrollView>
 }
+
+const screen = Dimensions.get('screen')
 
 const ScrollListView = styled.ScrollView`
     width: 100%;
@@ -19,9 +22,9 @@ const ScrollListView = styled.ScrollView`
 
 const TrainCenterBlock = styled.TouchableOpacity`
     width: 100%;
+    height: ${screen.height * 0.2}px;
     padding: 10px;
     background-color: #ffffff;
-    align-items: center;
     flex-direction: row;
     border-top-color: #c6c6cf;
     border-top-width: 1px;
@@ -33,7 +36,7 @@ const ContentBlock = styled.View`
 `
 
 const TitleText = styled.Text`
-    margin-bottom: 10px;
+    margin-bottom: 40px;
     font-size: 18px;
     font-weight: bold;
 `
@@ -47,14 +50,19 @@ const ContentText = styled.Text`
 const GradeText = styled.Text`
     width: 25%;
     flex-direction: column;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 35px;
     color: #626271;
     text-align: center;
+    align-self: center;
 `
 
 function TrainCourse({ course }: trainCourseProps) {
-    const gradeText = course.grade.startsWith('우수훈련기관') ? course.grade.replace('우수훈련기관 ', '우수훈련기관\n') : course.grade
+    const gradeText = course.grade
+        ? course.grade.startsWith('우수훈련기관')
+            ? course.grade.replace('우수훈련기관 ', '우수훈련기관\n')
+            : course.grade
+        : '없음'
     const [showDetail, setShowDetail] = useState<boolean>(false)
     const onClick = async (event: GestureResponderEvent) => {
         event.preventDefault()
@@ -80,9 +88,9 @@ function TrainCourse({ course }: trainCourseProps) {
 }
 
 // TODO: pagination 구현(무한 스크롤)
-export function TrainCenterList({ data }: listProps) {
+export function TrainCenterList({ data, scrollRef }: listProps) {
     return (
-        <ScrollListView horizontal={false}>
+        <ScrollListView horizontal={false} ref={scrollRef}>
             {data.map(center => (
                 <TrainCourse key={center._id} course={center} />
             ))}

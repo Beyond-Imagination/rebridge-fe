@@ -3,7 +3,7 @@ export interface IUser {
     email: string
     birthdate: Date
     gender: number
-    lastOccupation: string
+    occupation: string
 }
 
 export interface IUserDetail extends IUser {
@@ -42,6 +42,10 @@ export interface ISignUpRequest {
     birthDate: Date
     gender: number
     occupation: string
+}
+
+export interface IUserDetailResponse {
+    user: IUserDetail
 }
 
 export interface ISignUpResponse {

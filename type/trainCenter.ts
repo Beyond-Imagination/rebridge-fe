@@ -1,4 +1,5 @@
 import { trainCourse } from '@/type/trainCourse'
+import { ICoordinate } from '@/type/map'
 
 export interface trainCenter {
     _id: string
@@ -10,9 +11,18 @@ export interface trainCenter {
     addr: string
     hpAddr: string
     email: string
+    coordinates: ICoordinate
 }
 
 export interface IGetTrainCenterDetailResponse {
     trainCenter: trainCenter
     trainCourses: trainCourse[]
 }
+
+export interface SearchTarget {
+    searchText: string
+    tagList: string[]
+    createdAt: string
+}
+
+export interface ISearchTrainCenterRequest extends SearchTarget {}

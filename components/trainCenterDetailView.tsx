@@ -42,6 +42,7 @@ const DetailContainer = styled.View`
     border-radius: 6px;
     padding: 10px;
     width: ${screen.width * 0.9}px;
+    height: ${screen.height * 0.8}px;
 `
 
 const InfoContainer = styled.View`
@@ -117,10 +118,12 @@ export default function TrainCenterDetailView({ id, onClose }: Props) {
         refetchOnWindowFocus: false,
     })
 
+    const backImage = require('../assets/images/detail-view-image.png')
+
     if (!data) {
         return (
             <Modal>
-                <MainView source={require('../assets/images/detail-view-image.png')}>
+                <MainView source={backImage}>
                     <ShadowStyle distance={7}>
                         <DetailContainer>
                             <CloseButton onPress={onClose}>
@@ -136,7 +139,7 @@ export default function TrainCenterDetailView({ id, onClose }: Props) {
 
     return (
         <Modal>
-            <MainView source={require('../assets/images/detail-view-image.png')}>
+            <MainView source={backImage}>
                 <ShadowStyle distance={7}>
                     <DetailContainer>
                         <CloseButton onPress={onClose}>
@@ -153,7 +156,7 @@ export default function TrainCenterDetailView({ id, onClose }: Props) {
                             <InfoBox title={'홈페이지'} content={data.trainCenter.hpAddr} />
                             <SubTitle>모집중인 훈련과정</SubTitle>
                             <TrainCourseBox>
-                                <TrainCourseList data={data.trainCourses} size={16} />
+                                <TrainCourseList data={data.trainCourses} size={18} />
                             </TrainCourseBox>
                         </DetailBlock>
                     </DetailContainer>

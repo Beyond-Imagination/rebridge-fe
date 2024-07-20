@@ -1,3 +1,5 @@
 export * from './user'
 export * from './trainCourse'
 export * from './trainCenter'
+export * from './trainStatistic'
+export * from './map'

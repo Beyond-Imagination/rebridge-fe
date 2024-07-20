@@ -87,7 +87,7 @@ const ListText = styled.Text`
 `
 
 const ItemText = styled.Text`
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
     width: 20%;
 `
@@ -161,7 +161,7 @@ export function TrainCourseSimpleView({ filter, title }: Props) {
                 <ListText>시작일</ListText>
                 <ListText>상세보기</ListText>
             </ListView>
-            {data.docsNm === 0 ? <NoneText>데이터 없음</NoneText> : data.docs.map(course => <TrainCourseSimple course={course} />)}
+            {data.docsNm === 0 ? <NoneText>데이터 없음</NoneText> : data.docs.map(course => <TrainCourseSimple key={course._id} course={course} />)}
         </ViewBox>
     )
 }

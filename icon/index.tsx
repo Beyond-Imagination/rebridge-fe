@@ -117,3 +117,25 @@ export function InfoIcon({ width, height }: Props) {
         </Svg>
     )
 }
+
+export function LocationIcon({ width, height }: Props) {
+    return (
+        <Svg width={width} height={height} viewBox="0 0 448 512">
+            <Path
+                fill={'#90909F'}
+                d="M429.6 92.1c4.9-11.9 2.1-25.6-7-34.7s-22.8-11.9-34.7-7l-352 144c-14.2 5.8-22.2 20.8-19.3 35.8s16.1 25.8 31.4 25.8l176 0 0 176c0 15.3 10.8 28.4 25.8 31.4s30-5.1 35.8-19.3l144-352z"
+            />
+        </Svg>
+    )
+}
+
+export function ListIcon({ width, height }: Props) {
+    return (
+        <Svg width={width} height={height} viewBox="0 0 448 512">
+            <Path
+                fill={'#FF6C3ECC'}
+                d="M448 64c0-17.7-14.3-32-32-32L32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32zm0 256c0-17.7-14.3-32-32-32L32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32zM0 192c0 17.7 14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 160c-17.7 0-32 14.3-32 32zM448 448c0-17.7-14.3-32-32-32L32 416c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32z"
+            />
+        </Svg>
+    )
+}

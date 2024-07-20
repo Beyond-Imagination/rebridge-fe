@@ -7,7 +7,6 @@ import { Shadow } from 'react-native-shadow-2'
 import { getTrainCourseDetail } from '@/api/trainCourse'
 import { CrossButton, InfoIcon } from '@/icon'
 import ModalNCS from '@/components/ModalNCS'
-import { getNcsCodeDetail } from '@/api'
 
 interface Props {
     courseId: string
@@ -26,21 +25,13 @@ const Loading = styled.ActivityIndicator`
     max-height: 600px;
     align-self: center;
 `
+
 const ShadowStyle = styled(Shadow)`
     background-color: #ffffff;
     border-radius: 12px;
     border-color: #ffffff;
 `
 
-// const ModalInnerContainer = styled.ScrollView`
-//     flex: 0.8;
-//     width: 90%;
-//     background-color: white;
-//     border-radius: 10px;
-//     border-width: 1px;
-//     border-color: gray;
-//     padding: 20px;
-// `
 const ModalContainer = styled.Modal``
 
 const ModalContentContainer = styled.ImageBackground`
@@ -76,6 +67,7 @@ const ModalInnerContainer = styled.View`
     border-radius: 6px;
     padding: 10px;
     width: ${screen.width * 0.9}px;
+    height: ${screen.height * 0.8}px;
 `
 
 const InfoContainer = styled.View`
@@ -122,13 +114,6 @@ const ButtonText = styled.Text`
     text-align-vertical: center;
 `
 
-
-const LoadingText = styled.Text`
-  text-align: center;
-  margin-top: 200px;
-  font-size: 18px;
-`
-
 const InfoTitle = styled.Text`
     font-weight: bold;
     font-size: 16px;
@@ -159,41 +144,19 @@ export default function TrainCourseDetailView({ courseId, onClose }: Props) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
 
-    const { data,isLoading } = useQuery({
+    const { data } = useQuery({
         queryKey: ['trainCourseDetail', courseId],
         queryFn: () => getTrainCourseDetail(courseId),
         enabled: !!courseId,
         refetchOnWindowFocus: false,
     })
 
-    const target = data?.ncsCd.split('(')[0]
-
-    const { data: ncsDetail } = useQuery({
-        queryKey: [target ?? ''],
-        queryFn: () => getNcsCodeDetail(target ?? ''),
-        enabled: !!courseId,
-        refetchOnWindowFocus: false,
-    })
-
-    if (isLoading) {
-        return (
-            <ModalContainer visible={true} animationType="slide">
-                <ModalContentContainer>
-                    <ModalInnerContainer>
-                        <CloseButtonContainer onPress={onClose}>
-                            <CrossButton width={30} height={30} />
-                        </CloseButtonContainer>
-                        <LoadingText>훈련기관 상세정보 로딩중입니다...🌀</LoadingText>
-                    </ModalInnerContainer>
-                </ModalContentContainer>
-            </ModalContainer>
-        )
-    }
+    const backImage = require('../assets/images/detail-view-image.png')
 
     if (!data) {
         return (
             <ModalContainer>
-                <ModalContentContainer source={require('../assets/images/detail-view-image.png')}>
+                <ModalContentContainer source={backImage}>
                     <ShadowStyle distance={7}>
                         <ModalInnerContainer>
                             <CloseButtonContainer onPress={onClose}>
@@ -209,7 +172,7 @@ export default function TrainCourseDetailView({ courseId, onClose }: Props) {
 
     return (
         <ModalContainer>
-            <ModalContentContainer source={require('../assets/images/detail-view-image.png')}>
+            <ModalContentContainer source={backImage}>
                 <ShadowStyle distance={7}>
                     <ModalInnerContainer>
                         <CloseButtonContainer onPress={onClose}>
@@ -229,10 +192,10 @@ export default function TrainCourseDetailView({ courseId, onClose }: Props) {
                                 </InfoContentBlock>
                             </InfoContainer>
                             <InfoBox title={'훈련비용'} content={`${numberWithCommas(data.courseMan)} 원`} />
-
-                            {/* <InfoBox title={'실제부담비용'} content={`${numberWithCommas(data.realMan)} 원`} /> */}
-                            <InfoBox title={'실제부담비용'} content={data.realMan === data.courseMan ? '전액지원' : numberWithCommas(data.realMan) + ' 원'} />
-
+                            <InfoBox
+                                title={'실제부담비용'}
+                                content={data.realMan === data.courseMan ? '전액지원' : numberWithCommas(data.realMan) + ' 원'}
+                            />
                             <MiddleTitle>훈련과정 안내</MiddleTitle>
                             <InfoBox title={'선수학습'} content={data.trainPreCourse ? data.trainPreCourse : '해당없음'} />
                             <InfoBox title={'훈련목표'} content={data.trainGoal ? data.trainGoal : '해당없음'} />

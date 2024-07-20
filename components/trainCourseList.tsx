@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 
 import { trainCourse } from '@/type'
 import TrainCourseDetailView from './TrainCourseDetailView'
@@ -20,12 +20,15 @@ interface fontProps {
     size: number
 }
 
+const screen = Dimensions.get('screen')
+
 const TrainCourseBlock = styled(TouchableOpacity)`
     width: 100%;
     padding: 15px;
     background-color: #ffffff;
     border-color: #c6c6cf;
     border-width: 1px;
+    height: ${screen.height * 0.18}px;
 `
 
 const ContentBlock = styled.View`
@@ -79,17 +82,22 @@ function TrainCourse({ course, size }: trainCourseProps) {
                 onPress={() => {
                     setShowDetail(true)
                 }}
+                activeOpacity={1}
             >
-                <TitleText size={size}>{course.title}</TitleText>
+                <TitleText size={size} numberOfLines={1}>
+                    {course.title}
+                </TitleText>
                 <ContentBlock>
                     <Content>
                         <ContentText size={size * 0.8}>{course.inoNm}</ContentText>
                         <ContentText size={size * 0.8}>{`${course.trainStartDate}~${course.trainEndDate}(${course.trainTime})`}</ContentText>
-                        <ContentText size={size * 0.8}>{course.addr}</ContentText>
+                        <ContentText size={size * 0.8} numberOfLines={2}>
+                            {course.addr}
+                        </ContentText>
                     </Content>
                     <EmplRateBlock>
                         <StyledText size={size * 0.8}>취업률</StyledText>
-                        <EmplRate size={size * 1.2}>{course.elEmplRate ? `${course.elEmplRate}%` : '데이터 없음'}</EmplRate>
+                        <EmplRate size={size}>{course.elEmplRate !== -1 ? `${course.elEmplRate}%` : '통계 없음'}</EmplRate>
                     </EmplRateBlock>
                 </ContentBlock>
             </TrainCourseBlock>

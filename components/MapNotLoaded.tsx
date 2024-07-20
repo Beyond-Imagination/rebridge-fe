@@ -1,10 +1,23 @@
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
+import styled from 'styled-components/native'
 
-const MapNotLoaded = ({description}) => {
+interface Props {
+    description: string
+}
+
+const MainView = styled.View`
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+`
+
+const MapNotLoaded = ({ description }: Props) => {
     return (
-        <View>
-            <Text> { description ? description : 'Loading...'} </Text>
-        </View>
+        <MainView>
+            <Text> {description !== '' ? description : 'Loading...'} </Text>
+        </MainView>
     )
 }
 

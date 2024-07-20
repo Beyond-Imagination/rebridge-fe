@@ -1,13 +1,79 @@
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components/native'
-import { TrainCourseList } from './trainCourseList'
-import { MapIcon } from '@/icon'
-import { trainCourse } from '@/type'
-import { useAuthorization } from '@/provider'
 import { useQuery } from '@tanstack/react-query'
-import { getRecommendTrainCourseList, getUserDetail } from '@/api'
+import { Dimensions, ScrollView } from 'react-native'
+import { Shadow } from 'react-native-shadow-2'
+
+import { TrainCourseList } from './trainCourseList'
+import { CarotDown, ListIcon, MapIcon } from '@/icon'
+import { useAuthorization } from '@/provider'
+import { getRecommendTrainCourseList } from '@/api'
+import { IUserDetail, trainCourse } from '@/type'
+import GoogleMaps from '@/components/GoogleMaps'
+
+interface Props {
+    user: IUserDetail
+}
+
+interface MapViewProps {
+    data: trainCourse[]
+    onClose: () => void
+}
+
+const screen = Dimensions.get('screen')
+
+const ShadowStyle = styled(Shadow)`
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    border-color: #ffffff;
+`
+
+const Loading = styled.ActivityIndicator`
+    min-height: 200px;
+    max-height: 200px;
+    align-self: center;
+`
 
 const Container = styled.ScrollView`
     background-color: #ffffff;
+`
+
+const MainView = styled.View`
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: -1;
+`
+const MapView = styled.View`
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    z-index: -1;
+`
+
+const ResultView = styled.View`
+    width: 100%;
+    height: 55%;
+    position: absolute;
+    background-color: inherit;
+    border-radius: 10px;
+    padding-top: 10px;
+    top: 40%;
+    z-index: 1;
+`
+
+const ResultContent = styled.View`
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 10px;
+    width: 100%;
+`
+
+const ButtonContainer = styled.View`
+    align-items: flex-end;
+    margin: 0;
 `
 
 const TitleText = styled.Text`
@@ -17,10 +83,9 @@ const TitleText = styled.Text`
 `
 const LoadingText = styled.Text`
     font-size: 18px;
-    margin: 10px;
+    margin: 150px 0 20px 0;
     text-align: center;
-    margin-top: 150px;
-`;
+`
 
 const SubtitleText = styled.Text`
     font-size: 16px;
@@ -32,9 +97,20 @@ const HighlightText = styled.Text`
     font-weight: bold;
 `
 
-const ButtonContainer = styled.View`
-    align-items: flex-end;
-    margin: 0;
+const ButtonText = styled.Text`
+    margin-left: 5px;
+`
+
+const ListButtonText = styled.Text`
+    font-size: 15px;
+    margin-left: 5px;
+`
+
+const ResultText = styled.Text`
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 5px;
 `
 
 const StyledButton = styled.TouchableOpacity`
@@ -49,21 +125,71 @@ const StyledButton = styled.TouchableOpacity`
     flex-direction: row;
 `
 
-const ButtonText = styled.Text`
-    margin-left: 5px;
+const ResultTextBox = styled.TouchableOpacity`
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    border-color: #c6c6cf;
+    border-bottom-width: 1px;
+    padding-bottom: 15px;
 `
 
-export default function RecommendTrainCourseList() {
+const ListButton = styled.TouchableOpacity`
+    position: absolute;
+    width: ${screen.width * 0.3}px;
+    top: 35%;
+    left: 50%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border-radius: 50px;
+    border-color: #dcdce2;
+    border-width: 1px;
+    padding: 3px;
+    z-index: 3;
+    transform: translate(-${screen.width * 0.15}px);
+`
 
+function RecommendMapView({ data, onClose }: MapViewProps) {
+    const scrollRef = useRef<ScrollView>(null)
+
+    const handleMarkerPress = (markerIndex: number) => {
+        if (scrollRef.current && markerIndex >= 0) {
+            scrollRef.current.scrollTo({ y: markerIndex * screen.height * 0.2, animated: true })
+        }
+    }
+
+    return (
+        <MainView>
+            <MapView>
+                <GoogleMaps marker={data} onMarkPress={handleMarkerPress} />
+            </MapView>
+            <ListButton activeOpacity={1} onPress={onClose}>
+                <ListIcon width={30} height={30} />
+                <ListButtonText>목록보기</ListButtonText>
+            </ListButton>
+            <ResultView>
+                <ShadowStyle distance={5}>
+                    <ResultContent>
+                        <ResultTextBox activeOpacity={1}>
+                            {/*TODO: change sort value*/}
+                            <ResultText>관련도순</ResultText>
+                            <CarotDown width={20} height={20} />
+                        </ResultTextBox>
+                        <Container ref={scrollRef}>
+                            <TrainCourseList data={data} size={20} />
+                        </Container>
+                    </ResultContent>
+                </ShadowStyle>
+            </ResultView>
+        </MainView>
+    )
+}
+
+export default function RecommendTrainCourseList({ user }: Props) {
+    const [showMap, setShowMap] = useState(false)
     const { jwt } = useAuthorization()
-
-    const { data:userdata } = useQuery({
-        queryKey: ['getUserDetail', jwt],
-        queryFn: () => getUserDetail({ jwt }),
-        enabled: !!jwt,
-    })
-
-    const userName = userdata?.user?.name ?? '';
 
     const { data, isLoading } = useQuery({
         queryKey: ['getRecommendTrainCourseList', jwt],
@@ -71,50 +197,48 @@ export default function RecommendTrainCourseList() {
         enabled: !!jwt,
     })
 
-    const recommendCourseList = data?.docs
-
-    if(isLoading){
-        return(
-
-        <Container>
-            <TitleText>
-                <HighlightText>{userName}</HighlightText>님의 맞춤 훈련 과정
-            </TitleText>
-            <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
-            <ButtonContainer>
-                <StyledButton
-                    onPress={() => {
-                        // TODO: 정보입력 페이지로 이동
-                        alert('훈련과정 추천(지도뷰) 페이지로 이동')
-                    }}
-                >
-                    <MapIcon width={24} height={24} />
-                    <ButtonText>지도보기</ButtonText>
-                </StyledButton>
-            </ButtonContainer>
-            <LoadingText>{userName}님을 위한 맞춤 직업 훈련 기관을 {"\n"} 검색 중입니다...🌀</LoadingText>
-        </Container>
+    if (isLoading || !data) {
+        return (
+            <Container>
+                <TitleText>
+                    <HighlightText>{user.name}</HighlightText>님의 맞춤 훈련 과정
+                </TitleText>
+                <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
+                <ButtonContainer>
+                    <StyledButton>
+                        <MapIcon width={24} height={24} />
+                        <ButtonText>지도보기</ButtonText>
+                    </StyledButton>
+                </ButtonContainer>
+                <LoadingText>
+                    {user.name}님을 위한 맞춤 직업 훈련 기관을 {'\n'} 검색 중입니다...🌀
+                </LoadingText>
+                <Loading size="large" />
+            </Container>
         )
     }
 
-    return (
-        <Container>
-            <TitleText>
-                <HighlightText>{userName}</HighlightText>님의 맞춤 훈련 과정
-            </TitleText>
-            <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
-            <ButtonContainer>
-                <StyledButton
-                    onPress={() => {
-                        // TODO: 정보입력 페이지로 이동
-                        alert('훈련과정 추천(지도뷰) 페이지로 이동')
-                    }}
-                >
-                    <MapIcon width={24} height={24} />
-                    <ButtonText>지도보기</ButtonText>
-                </StyledButton>
-            </ButtonContainer>
-            <TrainCourseList data={recommendCourseList} size={18} />
-        </Container>
-    )
+    if (!showMap) {
+        return (
+            <Container>
+                <TitleText>
+                    <HighlightText>{user.name}</HighlightText>님의 맞춤 훈련 과정
+                </TitleText>
+                <SubtitleText>사용자의 정보를 바탕으로 직업 훈련 기관을 추천해 드립니다</SubtitleText>
+                <ButtonContainer>
+                    <StyledButton onPress={() => setShowMap(true)}>
+                        <MapIcon width={24} height={24} />
+                        <ButtonText>지도보기</ButtonText>
+                    </StyledButton>
+                </ButtonContainer>
+                {data && <TrainCourseList data={data.docs} size={18} />}
+            </Container>
+        )
+    } else {
+        return (
+            <MainView>
+                <RecommendMapView data={data.docs} onClose={() => setShowMap(false)} />
+            </MainView>
+        )
+    }
 }

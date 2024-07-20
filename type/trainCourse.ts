@@ -1,3 +1,5 @@
+import { ICoordinate } from '@/type/map'
+
 export interface trainCourse {
     _id: string
     title: string
@@ -7,6 +9,8 @@ export interface trainCourse {
     trainStartDate: string
     trainEndDate: string
     trainTime: string
+    recommendScore: number
+    coordinates: ICoordinate
 }
 
 export interface ISimpleTrainCourse {
@@ -39,16 +43,7 @@ export interface IGetTrainCourseDetailResponse {
     trainTarget: string
     url: string
 }
+
 export interface IGetRecommendTrainCourseListResponse {
-    docs: Array<{
-        _id: string;
-        title: string;
-        elEmplRate: number;
-        trainTime: string;
-        trainStartDate: string;
-        trainEndDate: string;
-        addr: string;
-        inoNm: string;
-        recommendScore: number;
-    }>;
+    docs: trainCourse[]
 }

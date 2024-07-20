@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/rebridge-logo.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FF6C3E"
     },
@@ -50,3 +50,4 @@
     "owner": "joonamin44"
   }
 }
+

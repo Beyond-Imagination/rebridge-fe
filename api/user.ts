@@ -7,7 +7,7 @@ import {
     IAuthorization,
     IUpdateUserRequest,
     IUpdateUserResponse,
-    IUserDetail,
+    IUserDetailResponse,
 } from '@/type'
 
 export async function postSignIn(request: ISignInRequest): Promise<ISignInResponse> {
@@ -36,7 +36,7 @@ export async function postSignUp(request: ISignUpRequest): Promise<ISignUpRespon
     return res.json()
 }
 
-export async function getUserDetail(auth: IAuthorization): Promise<IUserDetail> {
+export async function getUserDetail(auth: IAuthorization): Promise<IUserDetailResponse> {
     const res = await fetch(`${SERVER_URL}/user/detail`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${auth.jwt}` },
