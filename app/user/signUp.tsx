@@ -2,6 +2,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Modal,
+    Platform,
     ScrollView,
     StyleProp,
     Text,
@@ -13,7 +14,7 @@ import {
     ViewStyle,
 } from 'react-native'
 import { CommonActions, useNavigation } from '@react-navigation/native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import PickerSelect from 'react-native-picker-select'
@@ -71,6 +72,7 @@ export default function SignUp() {
     const {
         control,
         watch,
+        setValue,
         handleSubmit,
         formState: { isSubmitting, errors },
     } = useForm<ISignUpInputs>()
@@ -84,6 +86,10 @@ export default function SignUp() {
         },
     })
 
+    useEffect(() => {
+        setValue('birthDate', new Date('1960-01-01'))
+    }, [setValue])
+
     const onSubmit = (data: ISignUpInputs) => {
         const body: ISignUpRequest = {
             oauthProvider: 'rebridge',
@@ -92,7 +98,7 @@ export default function SignUp() {
             name: data.name,
             email: data.email,
             birthDate: data.birthDate,
-            gender: data.gender,
+            gender: data.gender - 1,
             occupation: data.occupation,
         }
         mutation.mutate(body)
@@ -265,13 +271,12 @@ export default function SignUp() {
                             <Controller
                                 control={control}
                                 name="birthDate"
-                                defaultValue={new Date('1960-01-01')}
                                 rules={{ required: '생년월일이 필요합니다' }}
                                 render={({ field: { onChange, value } }) => (
                                     <View style={{ maxWidth: 320 }}>
                                         <TouchableOpacity style={styles.input} onPress={() => setShow(!show)}>
                                             <Text style={{ color: '#90909F' }}>
-                                                {value.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                                {value && value.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </Text>
                                             <CarotDown width={20} height={20} />
                                         </TouchableOpacity>
@@ -279,11 +284,14 @@ export default function SignUp() {
                                             <DateTimePicker
                                                 mode="date"
                                                 value={value}
-                                                display="spinner"
+                                                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                                 minimumDate={new Date('1910-01-01')}
                                                 locale={'ko-KR'}
-                                                onChange={(event, selectedDate) => {
-                                                    if (selectedDate) {
+                                                onChange={async (event, selectedDate) => {
+                                                    if (Platform.OS === 'android') {
+                                                        setShow(false)
+                                                    }
+                                                    if (event.type === 'set' && selectedDate) {
                                                         onChange(selectedDate)
                                                     }
                                                 }}
@@ -300,10 +308,10 @@ export default function SignUp() {
                             <Controller
                                 control={control}
                                 name="gender"
-                                rules={{ required: '성별 입력이 필요합니다' }}
+                                rules={{ required: '성별 입력이 필요합니다', validate: value => value !== -1 || '성별 입력이 필요합니다' }}
                                 render={({ field: { onChange, value } }) => (
                                     <PickerSelect
-                                        placeholder={{ label: '입력', value: null }}
+                                        placeholder={{ label: '입력', value: -1 }}
                                         style={{
                                             inputIOS: styles.input,
                                             inputAndroid: styles.input,
@@ -312,8 +320,8 @@ export default function SignUp() {
                                         useNativeAndroidPickerStyle={false}
                                         onValueChange={value => onChange(value)}
                                         items={[
-                                            { label: '남자', value: 0 },
-                                            { label: '여자', value: 1 },
+                                            { label: '남자', value: 1 },
+                                            { label: '여자', value: 2 },
                                         ]}
                                         value={value}
                                     />

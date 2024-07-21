@@ -71,7 +71,6 @@ const Search = () => {
 
     useEffect(() => {
         if (target.searchText !== '') {
-            console.log(target)
             setShowModal(true)
         }
     }, [target])
