@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { getUserDetail, updateUserDetail } from '@/api'
 import { useAuthorization } from '@/provider'
 import { IUpdateUserRequest, IUserDetail } from '@/type'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 
 interface Styles {
@@ -104,12 +104,17 @@ const MyInfo = () => {
         })()
     }, [auth])
 
+    const queryClient = useQueryClient()
+
     const mutation = useMutation({
         mutationFn: (body: IUpdateUserRequest) => {
-            console.log(body)
             return updateUserDetail(body)
         },
-        //
+        onSuccess: async () => {
+            await queryClient.refetchQueries({
+                queryKey: ['getUserDetail', auth.jwt],
+            })
+        },
     })
 
     const {
