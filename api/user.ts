@@ -50,7 +50,10 @@ export async function getUserDetail(auth: IAuthorization): Promise<IUserDetailRe
 export async function updateUserDetail(request: IUpdateUserRequest): Promise<IUpdateUserResponse> {
     const res = await fetch(`${SERVER_URL}/user/detail`, {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${request.secret.token}` },
+        headers: {
+            Authorization: `Bearer ${request.secret.token}`,
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(request.body),
     })
     if (!res.ok) {

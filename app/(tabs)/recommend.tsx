@@ -12,8 +12,8 @@ const Recommend = () => {
         queryFn: () => getUserDetail({ jwt }),
         enabled: !!jwt,
     })
-    if (userDetail?.user && userDetail.user.occupation && userDetail.user.jobObjectives && userDetail.user.major) {
-        return <RecommendTrainCourseList user={userDetail.user} />
+    if (userDetail && userDetail.occupation && userDetail.jobObjectives && userDetail.major) {
+        return <RecommendTrainCourseList user={userDetail} />
     } else {
         return <RecommendInfoRequired />
     }

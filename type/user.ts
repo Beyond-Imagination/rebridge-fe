@@ -4,11 +4,13 @@ export interface IUser {
     birthdate: Date
     gender: number
     occupation: string
+    oauthId: string
 }
 
 export interface IUserDetail extends IUser {
     major: string
     jobObjectives: string
+    address: string
 }
 
 export interface ISignUpInputs {
@@ -44,9 +46,7 @@ export interface ISignUpRequest {
     occupation: string
 }
 
-export interface IUserDetailResponse {
-    user: IUserDetail
-}
+export interface IUserDetailResponse extends IUserDetail {}
 
 export interface ISignUpResponse {
     oauthId: string
@@ -54,9 +54,10 @@ export interface ISignUpResponse {
 
 export interface IUpdateUserRequest {
     body: {
-        lastOccupation: string
+        occupation: string
         major: string
         jobObjectives: string
+        address: string
     }
     secret: {
         token: string
